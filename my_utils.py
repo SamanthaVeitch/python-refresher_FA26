@@ -1,3 +1,15 @@
+def to_int(raw_value, fallback=-1):
+    """Convert a string to an integer, with a fallback value."""
+    try:
+        return int(float(raw_value))
+    except (ValueError, TypeError):
+        print(
+            f"Error: could not convert "
+            f"value '{raw_value}' to an integer, "
+            f"replacing with {fallback}.")
+        return fallback
+
+
 def get_column(file_name, query_column, query_value, result_column=1):
     """Extract values from a CSV column based on mathcing row query.
 
@@ -21,15 +33,7 @@ def get_column(file_name, query_column, query_value, result_column=1):
             for line in file:
                 values = line.strip().split(",")
                 if values[query_column] == query_value:
-                    raw_value = values[result_column]
-                    try:
-                        results.append(int(float(raw_value)))
-                    except ValueError:
-                        print(
-                            f"Error: could not convert "
-                            f"value '{raw_value}' to an integer, "
-                            f"replacing with -1.")
-                        results.append(-1)
+                    results.append(to_int(values[result_column], -1))
 
     except FileNotFoundError:
         print(f"Error: File '{file_name}' not found.")
