@@ -63,5 +63,39 @@ class TestMyUtilsCSV(unittest.TestCase):
         self.assertEqual(result, [10, 20])
 
 
+class TestMyUtilsMath(unittest.TestCase):
+    def setUp(self):
+        self.test_array = array.array('i', [1, 2, 3, 4, 5])
+        self.empty_array = array.array('i')
+
+    def tearDown(self):
+        self.test_array = None
+        self.empty_array = None
+
+    """Tests for to_int(raw_value, fallback=-1)."""
+
+    def test_to_int_pos(self):
+        self.assertEqual(my_utils.to_int("42"), 42)
+
+    def test_to_int_zero(self):
+        self.assertEqual(my_utils.to_int("0"), 0)
+
+    def test_to_int_neg(self):
+        self.assertEqual(my_utils.to_int("-17"), -17)
+
+    def test_to_int_value_error_fallback(self):
+        self.assertEqual(my_utils.to_int("not_a_number"), -1)
+
+    def test_to_int_type_error_custom_fallback(self):
+        self.assertEqual(my_utils.to_int("not_a_number", fallback=99), 99)
+
+    def test_to_int_float_string_truncation(self):
+        # int(float("3.7")) truncates rather than rounds.
+        self.assertEqual(my_utils.to_int("3.7"), 3)
+
+    def test_to_int_empty_string(self):
+        self.assertEqual(my_utils.to_int(""), -1)
+
+
 if __name__ == '__main__':
     unittest.main()
