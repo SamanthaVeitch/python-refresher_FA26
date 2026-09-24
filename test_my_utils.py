@@ -109,6 +109,10 @@ class TestMyUtilsMath(unittest.TestCase):
         self.assertAlmostEqual(my_utils.array_mean(
             array.array('i', [-5, -10, -15])), -10.0)
 
+    def test_array_mean_mixed_signs(self):
+        self.assertAlmostEqual(my_utils.array_mean(
+            array.array('i', [-5, 0, 5])), 0.0)
+
     def test_array_mean_non_numeric_value(self):
         self.assertIsNone(my_utils.array_mean([1, 2, 3, "four", 5]))
 
@@ -147,6 +151,10 @@ class TestMyUtilsMath(unittest.TestCase):
         self.assertAlmostEqual(my_utils.array_median(
             array.array('i', [-5, -10, -15])), -10.0)
 
+    def test_array_median_mixed_signs(self):
+        self.assertAlmostEqual(my_utils.array_median(
+            array.array('i', [-5, 0, 5])), 0.0)
+
     def test_array_median_non_numeric_value(self):
         self.assertIsNone(my_utils.array_median([1, 2, 3, "four", 5]))
 
@@ -170,6 +178,53 @@ class TestMyUtilsMath(unittest.TestCase):
             values = [random.randint(-1000, 1000) for _ in range(50)]
             expected = statistics.median(values)
             self.assertAlmostEqual(my_utils.array_median(
+                array.array('i', values)), expected)
+
+    """Tests for array_std_dev(values)."""
+
+    def test_array_std_dev_pos(self):
+        expected = statistics.stdev([2, 4, 4, 4, 5, 5, 7, 9])
+        result = my_utils.array_std_dev(
+            array.array('i', [2, 4, 4, 4, 5, 5, 7, 9]))
+        self.assertAlmostEqual(result, expected)
+
+    def test_array_std_dev_identical_values(self):
+        self.assertAlmostEqual(my_utils.array_std_dev(
+            array.array('i', [5, 5, 5, 5])), 0.0)
+
+    def test_array_std_dev_neg(self):
+        expected = statistics.stdev([-5, -10, -15])
+        result = my_utils.array_std_dev(array.array('i', [-5, -10, -15]))
+        self.assertAlmostEqual(result, expected)
+
+    def test_array_std_dev_mixed_signs(self):
+        expected = statistics.stdev([-5, 0, 5])
+        result = my_utils.array_std_dev(array.array('i', [-5, 0, 5]))
+        self.assertAlmostEqual(result, expected)
+
+    def test_array_std_dev_single_value(self):
+        self.assertIsNone(my_utils.array_std_dev(
+            array.array('i', [7])))
+
+    def test_array_std_dev_non_numeric_value(self):
+        self.assertIsNone(my_utils.array_std_dev([1, 2, 3, "four", 5]))
+
+    def test_array_std_dev_empty_array(self):
+        self.assertIsNone(my_utils.array_std_dev(self.empty_array))
+
+    def test_array_std_dev_list(self):
+        with self.assertRaises(AttributeError):
+            my_utils.array_std_dev([1, 2, 3])
+
+    def test_array_std_dev_unsigned_int_array(self):
+        unsigned_array = array.array('I', [1, 2, 3])
+        self.assertAlmostEqual(my_utils.array_std_dev(unsigned_array), 1.0)
+
+    def test_array_std_dev_random_values(self):
+        for _ in range(1000):
+            values = [random.randint(-1000, 1000) for _ in range(50)]
+            expected = statistics.stdev(values)
+            self.assertAlmostEqual(my_utils.array_std_dev(
                 array.array('i', values)), expected)
 
 
