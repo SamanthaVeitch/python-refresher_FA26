@@ -1,17 +1,20 @@
+import array
+
+
 def to_int(raw_value, fallback=-1):
     """Convert a string to an integer, with a fallback value."""
     try:
         return int(float(raw_value))
     except (ValueError, TypeError):
         print(
-            f"Error: could not convert "
+            f"Warning: could not convert "
             f"value '{raw_value}' to an integer, "
             f"replacing with {fallback}.")
         return fallback
 
 
 def get_column(file_name, query_column, query_value, result_column=1):
-    """Extract values from a CSV column based on mathcing row query.
+    """Extract values from a CSV column based on matching row query.
 
     Arguments:
         file_name -- String of the file name to be opened
@@ -31,9 +34,14 @@ def get_column(file_name, query_column, query_value, result_column=1):
     try:
         with open(file_name, "r") as file:
             for line in file:
-                values = line.strip().split(",")
-                if values[query_column] == query_value:
-                    results.append(to_int(values[result_column], -1))
+                try:
+                    values = line.strip().split(",")
+                    if values[query_column] == query_value:
+                        results.append(to_int(values[result_column], -1))
+                except IndexError:
+                    print(
+                        f"Warning: Skipping incomplete data "
+                        f"in line: {line.strip()}")
 
     except FileNotFoundError:
         print(f"Error: File '{file_name}' not found.")
@@ -45,3 +53,108 @@ def get_column(file_name, query_column, query_value, result_column=1):
         print(f"Error: {e}")
 
     return results
+
+
+def array_mean(array):
+    """Calculate the mean of an array of numbers.
+    Truncated to zero decimal places then calculated
+
+    Arguments:
+        array -- Array or list of ints
+
+    Returns:
+        Float mean value, or None if the array is empty
+    """
+    if isinstance(array, list):
+        for i, value in enumerate(array):
+            if not isinstance(value, (int, float)):
+                print(f"Warning: Non-numeric value '{value}' at index {i}.")
+                return None
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
+        array = array.array('i', array)
+    if not array or len(array) == 0:
+        print("Warning: Cannot calculate mean of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Warning: Array must be of type 'i' or 'I' (integer).")
+        return None
+    return sum(array) / len(array)
+
+
+def array_median(array):
+    """Calculate the median of an array of numbers.
+    Truncated to zero decimal places then calculated
+
+    Arguments:
+        array -- Array or list of ints
+
+    Returns:
+        Float median value, or None if the array is empty
+    """
+    if isinstance(array, list):
+        for i, value in enumerate(array):
+            if not isinstance(value, (int, float)):
+                print(f"Warning: Non-numeric value '{value}' at index {i}.")
+                return None
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
+        array = array.array('i', array)
+    if not array:
+        print("Warning: Cannot calculate median of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Warning: Array must be of type 'i' or 'I' (integer).")
+        return None
+    sorted_array = sorted(array)
+    n = len(sorted_array)
+    mid = n // 2
+    if n % 2 == 0:
+        return (sorted_array[mid - 1] + sorted_array[mid]) / 2.0
+    else:
+        return float(sorted_array[mid])
+
+
+def array_std_dev(array):
+    """Calculate the standard deviation of an array of numbers.
+    Truncated to zero decimal places then calculated
+
+    Arguments:
+        array -- Array or lsit of ints
+
+    Returns:
+        Float standard deviation value, or None if the array is empty
+    """
+    if isinstance(array, list):
+        for i, value in enumerate(array):
+            if not isinstance(value, (int, float)):
+                print(f"Warning: Non-numeric value '{value}' at index {i}.")
+                return None
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
+        array = array.array('i', array)
+    if not array:
+        print("Warning: Cannot calculate standard deviation "
+              "of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Warning: Array must be of type 'i' or 'I' (integer).")
+        return None
+    if len(array) < 2:
+        print("Warning: Standard deviation requires at least two data points.")
+        return None
+    mean = array_mean(array)
+    variance = sum((x - mean) ** 2 for x in array) / (len(array) - 1)
+    return variance ** 0.5
