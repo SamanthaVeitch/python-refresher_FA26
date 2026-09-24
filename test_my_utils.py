@@ -96,6 +96,44 @@ class TestMyUtilsMath(unittest.TestCase):
     def test_to_int_empty_string(self):
         self.assertEqual(my_utils.to_int(""), -1)
 
+    """Tests for array_mean(values)."""
+
+    def test_array_mean_pos(self):
+        self.assertAlmostEqual(my_utils.array_mean(self.test_array), 3.0)
+
+    def test_array_mean_zero(self):
+        self.assertAlmostEqual(my_utils.array_mean(
+            array.array('i', [0, 0, 0])), 0.0)
+
+    def test_array_mean_neg(self):
+        self.assertAlmostEqual(my_utils.array_mean(
+            array.array('i', [-5, -10, -15])), -10.0)
+
+    def test_array_mean_non_numeric_value(self):
+        self.assertIsNone(my_utils.array_mean([1, 2, 3, "four", 5]))
+
+    def test_array_mean_empty_array(self):
+        self.assertIsNone(my_utils.array_mean(self.empty_array))
+
+    def test_array_mean_list(self):
+        with self.assertRaises(AttributeError):
+            my_utils.array_mean([1, 2, 3])
+
+    def test_array_mean_unsigned_int_array(self):
+        unsigned_array = array.array('I', [1, 2, 3])
+        self.assertAlmostEqual(my_utils.array_mean(unsigned_array), 2.0)
+
+    def test_array_mean_single_value(self):
+        self.assertAlmostEqual(my_utils.array_mean(
+            array.array('i', [7])), 7.0)
+
+    def test_array_mean_random_values(self):
+        for _ in range(1000):
+            values = [random.randint(-1000, 1000) for _ in range(50)]
+            expected = statistics.mean(values)
+            self.assertAlmostEqual(my_utils.array_mean(
+                array.array('i', values)), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
