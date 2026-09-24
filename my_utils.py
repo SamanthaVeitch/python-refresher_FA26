@@ -40,7 +40,8 @@ def get_column(file_name, query_column, query_value, result_column=1):
                         results.append(to_int(values[result_column], -1))
                 except IndexError:
                     print(
-                        f"Warning: Skipping incomplete data in line: {line.strip()}")
+                        f"Warning: Skipping incomplete data "
+                        f"in line: {line.strip()}")
 
     except FileNotFoundError:
         print(f"Error: File '{file_name}' not found.")
@@ -58,7 +59,7 @@ def array_mean(array):
     """Calculate the mean of an array of numbers.
 
     Arguments:
-        array -- Array of ints
+        array -- Array or list of ints
 
     Returns:
         Float mean value, or None if the array is empty
@@ -68,7 +69,12 @@ def array_mean(array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
-        print("Warning: Input is a list, expected an array. Converting to array.")
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
         array = array.array('i', array)
     if not array or len(array) == 0:
         print("Warning: Cannot calculate mean of an empty array.")
@@ -83,7 +89,7 @@ def array_median(array):
     """Calculate the median of an array of numbers.
 
     Arguments:
-        array -- Array of ints
+        array -- Array or list of ints
 
     Returns:
         Float median value, or None if the array is empty
@@ -93,7 +99,12 @@ def array_median(array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
-        print("Warning: Input is a list, expected an array. Converting to array.")
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
         array = array.array('i', array)
     if not array:
         print("Warning: Cannot calculate median of an empty array.")
@@ -114,7 +125,7 @@ def array_std_dev(array):
     """Calculate the standard deviation of an array of numbers.
 
     Arguments:
-        array -- Array of ints
+        array -- Array or lsit of ints
 
     Returns:
         Float standard deviation value, or None if the array is empty
@@ -124,10 +135,16 @@ def array_std_dev(array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
-        print("Warning: Input is a list, expected an array. Converting to array.")
+            elif isinstance(value, float):
+                print(f"Warning: Float value '{value}' "
+                      f"at index {i}.")
+                return None
+        print("Warning: Input is a list, expected an array. "
+              "Converting to array.")
         array = array.array('i', array)
     if not array:
-        print("Warning: Cannot calculate standard deviation of an empty array.")
+        print("Warning: Cannot calculate standard deviation "
+              "of an empty array.")
         return None
     if array.typecode != 'i' and array.typecode != 'I':
         print("Warning: Array must be of type 'i' or 'I' (integer).")

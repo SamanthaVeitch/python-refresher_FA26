@@ -116,6 +116,9 @@ class TestMyUtilsMath(unittest.TestCase):
     def test_array_mean_non_numeric_value(self):
         self.assertIsNone(my_utils.array_mean([1, 2, 3, "four", 5]))
 
+    def test_array_mean_floats(self):
+        self.assertIsNone(my_utils.array_mean([7.3, 3.5, 5]))
+
     def test_array_mean_empty_array(self):
         self.assertIsNone(my_utils.array_mean(self.empty_array))
 
@@ -157,6 +160,9 @@ class TestMyUtilsMath(unittest.TestCase):
 
     def test_array_median_non_numeric_value(self):
         self.assertIsNone(my_utils.array_median([1, 2, 3, "four", 5]))
+
+    def test_array_median_floats(self):
+        self.assertIsNone(my_utils.array_median([7.3, 3.5, 5]))
 
     def test_array_median_empty_array(self):
         self.assertIsNone(my_utils.array_median(self.empty_array))
@@ -208,6 +214,9 @@ class TestMyUtilsMath(unittest.TestCase):
 
     def test_array_std_dev_non_numeric_value(self):
         self.assertIsNone(my_utils.array_std_dev([1, 2, 3, "four", 5]))
+
+    def test_array_std_dev_floats(self):
+        self.assertIsNone(my_utils.array_std_dev([7.3, 3.5, 5]))
 
     def test_array_std_dev_empty_array(self):
         self.assertIsNone(my_utils.array_std_dev(self.empty_array))
