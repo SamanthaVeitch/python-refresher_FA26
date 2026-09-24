@@ -1,3 +1,6 @@
+import array
+
+
 def to_int(raw_value, fallback=-1):
     """Convert a string to an integer, with a fallback value."""
     try:
@@ -11,7 +14,7 @@ def to_int(raw_value, fallback=-1):
 
 
 def get_column(file_name, query_column, query_value, result_column=1):
-    """Extract values from a CSV column based on mathcing row query.
+    """Extract values from a CSV column based on matching row query.
 
     Arguments:
         file_name -- String of the file name to be opened
@@ -45,3 +48,65 @@ def get_column(file_name, query_column, query_value, result_column=1):
         print(f"Error: {e}")
 
     return results
+
+
+def array_mean(array):
+    """Calculate the mean of an array of numbers.
+
+    Arguments:
+        array -- Array of ints
+
+    Returns:
+        Float mean value, or None if the array is empty
+    """
+    if not array:
+        print("Error: Cannot calculate mean of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Error: Array must be of type 'i' or 'I' (integer).")
+        return None
+    return sum(array) / len(array)
+
+
+def array_median(array):
+    """Calculate the median of an array of numbers.
+
+    Arguments:
+        array -- Array of ints
+
+    Returns:
+        Float median value, or None if the array is empty
+    """
+    if not array:
+        print("Error: Cannot calculate median of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Error: Array must be of type 'i' or 'I' (integer).")
+        return None
+    sorted_array = sorted(array)
+    n = len(sorted_array)
+    mid = n // 2
+    if n % 2 == 0:
+        return (sorted_array[mid - 1] + sorted_array[mid]) / 2.0
+    else:
+        return float(sorted_array[mid])
+
+
+def array_std_dev(array):
+    """Calculate the standard deviation of an array of numbers.
+
+    Arguments:
+        array -- Array of ints
+
+    Returns:
+        Float standard deviation value, or None if the array is empty
+    """
+    if not array:
+        print("Error: Cannot calculate standard deviation of an empty array.")
+        return None
+    if array.typecode != 'i' and array.typecode != 'I':
+        print("Error: Array must be of type 'i' or 'I' (integer).")
+        return None
+    mean = array_mean(array)
+    variance = sum((x - mean) ** 2 for x in array) / len(array)
+    return variance ** 0.5
