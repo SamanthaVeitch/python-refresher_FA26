@@ -57,6 +57,7 @@ def get_column(file_name, query_column, query_value, result_column=1):
 
 def array_mean(array):
     """Calculate the mean of an array of numbers.
+    Truncated to zero decimal places then calculated
 
     Arguments:
         array -- Array or list of ints
@@ -87,6 +88,7 @@ def array_mean(array):
 
 def array_median(array):
     """Calculate the median of an array of numbers.
+    Truncated to zero decimal places then calculated
 
     Arguments:
         array -- Array or list of ints
@@ -123,6 +125,7 @@ def array_median(array):
 
 def array_std_dev(array):
     """Calculate the standard deviation of an array of numbers.
+    Truncated to zero decimal places then calculated
 
     Arguments:
         array -- Array or lsit of ints
