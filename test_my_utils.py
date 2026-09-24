@@ -134,6 +134,44 @@ class TestMyUtilsMath(unittest.TestCase):
             self.assertAlmostEqual(my_utils.array_mean(
                 array.array('i', values)), expected)
 
+    """Tests for array_median(values)."""
+
+    def test_array_median_pos(self):
+        self.assertAlmostEqual(my_utils.array_median(self.test_array), 3.0)
+
+    def test_array_median_zero(self):
+        self.assertAlmostEqual(my_utils.array_median(
+            array.array('i', [0, 0, 0])), 0.0)
+
+    def test_array_median_neg(self):
+        self.assertAlmostEqual(my_utils.array_median(
+            array.array('i', [-5, -10, -15])), -10.0)
+
+    def test_array_median_non_numeric_value(self):
+        self.assertIsNone(my_utils.array_median([1, 2, 3, "four", 5]))
+
+    def test_array_median_empty_array(self):
+        self.assertIsNone(my_utils.array_median(self.empty_array))
+
+    def test_array_median_list(self):
+        with self.assertRaises(AttributeError):
+            my_utils.array_median([1, 2, 3])
+
+    def test_array_median_unsigned_int_array(self):
+        unsigned_array = array.array('I', [1, 2, 3])
+        self.assertAlmostEqual(my_utils.array_median(unsigned_array), 2.0)
+
+    def test_array_median_single_value(self):
+        self.assertAlmostEqual(my_utils.array_median(
+            array.array('i', [7])), 7.0)
+
+    def test_array_median_random_values(self):
+        for _ in range(1000):
+            values = [random.randint(-1000, 1000) for _ in range(50)]
+            expected = statistics.median(values)
+            self.assertAlmostEqual(my_utils.array_median(
+                array.array('i', values)), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
