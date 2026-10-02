@@ -1,0 +1,23 @@
+name: Functional Tests
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  functional-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      - name: Run functional tests
+        run: bash tests/functional/test_print_fires.sh
