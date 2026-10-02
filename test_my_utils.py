@@ -32,6 +32,15 @@ class TestMyUtilsCSV(unittest.TestCase):
         self._temp_files.append(handle.name)
         return handle.name
 
+    def test_get_column_success(self):
+        path = self._make_csv([
+            "USA,10",
+            "Mexico,20",
+            "USA,30",
+        ])
+        result = my_utils.get_column(path, 0, "USA", result_column=1)
+        self.assertEqual(result, [10, 30])
+
     def test_type_value_error_case_bad_conversion_returns_fallback(self):
         path = self._make_csv([
             "USA,not_a_number",
@@ -89,6 +98,9 @@ class TestMyUtilsMath(unittest.TestCase):
     def test_to_int_type_error_custom_fallback(self):
         self.assertEqual(my_utils.to_int("not_a_number", fallback=99), 99)
 
+    def test_to_int_none_type_error(self):
+        self.assertEqual(my_utils.to_int(None), -1)
+
     def test_to_int_float_string_truncation(self):
         # int(float("3.7")) truncates rather than rounds.
         self.assertEqual(my_utils.to_int("3.7"), 3)
@@ -107,7 +119,7 @@ class TestMyUtilsMath(unittest.TestCase):
 
     def test_array_mean_neg(self):
         self.assertAlmostEqual(my_utils.array_mean(
-            array.array('i', [-5, -10, -15])), -10.0)
+            array.array('i', [-5, -10, -15, -10])), -10.0)
 
     def test_array_mean_mixed_signs(self):
         self.assertAlmostEqual(my_utils.array_mean(
@@ -123,8 +135,7 @@ class TestMyUtilsMath(unittest.TestCase):
         self.assertIsNone(my_utils.array_mean(self.empty_array))
 
     def test_array_mean_list(self):
-        with self.assertRaises(AttributeError):
-            my_utils.array_mean([1, 2, 3])
+        self.assertAlmostEqual(my_utils.array_mean([1, 2, 3]), 2.0)
 
     def test_array_mean_unsigned_int_array(self):
         unsigned_array = array.array('I', [1, 2, 3])
@@ -133,6 +144,10 @@ class TestMyUtilsMath(unittest.TestCase):
     def test_array_mean_single_value(self):
         self.assertAlmostEqual(my_utils.array_mean(
             array.array('i', [7])), 7.0)
+
+    def test_array_mean_unsorted(self):
+        values = array.array('i', [5, 1, 3, 2, 4])
+        self.assertAlmostEqual(my_utils.array_mean(values), 3.0)
 
     def test_array_mean_random_values(self):
         for _ in range(1000):
@@ -152,7 +167,7 @@ class TestMyUtilsMath(unittest.TestCase):
 
     def test_array_median_neg(self):
         self.assertAlmostEqual(my_utils.array_median(
-            array.array('i', [-5, -10, -15])), -10.0)
+            array.array('i', [-5, -10, -15, -10])), -10.0)
 
     def test_array_median_mixed_signs(self):
         self.assertAlmostEqual(my_utils.array_median(
@@ -168,8 +183,7 @@ class TestMyUtilsMath(unittest.TestCase):
         self.assertIsNone(my_utils.array_median(self.empty_array))
 
     def test_array_median_list(self):
-        with self.assertRaises(AttributeError):
-            my_utils.array_median([1, 2, 3])
+        self.assertAlmostEqual(my_utils.array_median([1, 2, 3]), 2.0)
 
     def test_array_median_unsigned_int_array(self):
         unsigned_array = array.array('I', [1, 2, 3])
@@ -178,6 +192,10 @@ class TestMyUtilsMath(unittest.TestCase):
     def test_array_median_single_value(self):
         self.assertAlmostEqual(my_utils.array_median(
             array.array('i', [7])), 7.0)
+
+    def test_array_median_unsorted(self):
+        values = array.array('i', [5, 1, 3, 2, 4])
+        self.assertAlmostEqual(my_utils.array_median(values), 3.0)
 
     def test_array_median_random_values(self):
         for _ in range(1000):
@@ -199,8 +217,8 @@ class TestMyUtilsMath(unittest.TestCase):
             array.array('i', [5, 5, 5, 5])), 0.0)
 
     def test_array_std_dev_neg(self):
-        expected = statistics.stdev([-5, -10, -15])
-        result = my_utils.array_std_dev(array.array('i', [-5, -10, -15]))
+        expected = statistics.stdev([-5, -10, -15, -10])
+        result = my_utils.array_std_dev(array.array('i', [-5, -10, -15, -10]))
         self.assertAlmostEqual(result, expected)
 
     def test_array_std_dev_mixed_signs(self):
@@ -222,12 +240,20 @@ class TestMyUtilsMath(unittest.TestCase):
         self.assertIsNone(my_utils.array_std_dev(self.empty_array))
 
     def test_array_std_dev_list(self):
-        with self.assertRaises(AttributeError):
-            my_utils.array_std_dev([1, 2, 3])
+        values = [1, 2, 3]
+        expected = statistics.stdev(values)
+        self.assertAlmostEqual(my_utils.array_std_dev(values), expected)
 
     def test_array_std_dev_unsigned_int_array(self):
         unsigned_array = array.array('I', [1, 2, 3])
-        self.assertAlmostEqual(my_utils.array_std_dev(unsigned_array), 1.0)
+        expected = statistics.stdev(unsigned_array)
+        self.assertAlmostEqual(
+            my_utils.array_std_dev(unsigned_array), expected)
+
+    def test_array_std_dev_unsorted(self):
+        values = array.array('i', [5, 1, 3, 2, 4])
+        expected = statistics.stdev(values)
+        self.assertAlmostEqual(my_utils.array_std_dev(values), expected)
 
     def test_array_std_dev_random_values(self):
         for _ in range(1000):
