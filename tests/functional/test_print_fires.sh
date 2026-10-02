@@ -57,6 +57,12 @@ run test_exit_code_std_dev_on_single_value_fails \
     --county_column 0 --fires_column 3 --operation std_dev
 assert_exit_code 0
 
+run test_invalid_operation \
+    "$PYTHON" "$PRINT_FIRES" \
+    --country "Finland" --file_name "$TEST_DATA" \
+    --county_column 0 --fires_column 3 --operation average
+assert_exit_code 0
+
 # ---------------------------------------------------------------------------
 # Default operation (no --operation given): raw list of ints
 # ---------------------------------------------------------------------------

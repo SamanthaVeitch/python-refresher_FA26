@@ -55,7 +55,7 @@ def get_column(file_name, query_column, query_value, result_column=1):
     return results
 
 
-def array_mean(array):
+def array_mean(input_array):
     """Calculate the mean of an array of numbers.
     Truncated to zero decimal places then calculated
 
@@ -65,8 +65,8 @@ def array_mean(array):
     Returns:
         Float mean value, or None if the array is empty
     """
-    if isinstance(array, list):
-        for i, value in enumerate(array):
+    if isinstance(input_array, list):
+        for i, value in enumerate(input_array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
@@ -76,17 +76,17 @@ def array_mean(array):
                 return None
         print("Warning: Input is a list, expected an array. "
               "Converting to array.")
-        array = array.array('i', array)
-    if not array or len(array) == 0:
+        input_array = array.array('i', input_array)
+    if not input_array or len(input_array) == 0:
         print("Warning: Cannot calculate mean of an empty array.")
         return None
-    if array.typecode != 'i' and array.typecode != 'I':
+    if input_array.typecode != 'i' and input_array.typecode != 'I':
         print("Warning: Array must be of type 'i' or 'I' (integer).")
         return None
-    return sum(array) / len(array)
+    return sum(input_array) / len(input_array)
 
 
-def array_median(array):
+def array_median(input_array):
     """Calculate the median of an array of numbers.
     Truncated to zero decimal places then calculated
 
@@ -96,8 +96,8 @@ def array_median(array):
     Returns:
         Float median value, or None if the array is empty
     """
-    if isinstance(array, list):
-        for i, value in enumerate(array):
+    if isinstance(input_array, list):
+        for i, value in enumerate(input_array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
@@ -107,14 +107,14 @@ def array_median(array):
                 return None
         print("Warning: Input is a list, expected an array. "
               "Converting to array.")
-        array = array.array('i', array)
-    if not array:
+        input_array = array.array('i', input_array)
+    if not input_array or len(input_array) == 0:
         print("Warning: Cannot calculate median of an empty array.")
         return None
-    if array.typecode != 'i' and array.typecode != 'I':
+    if input_array.typecode != 'i' and input_array.typecode != 'I':
         print("Warning: Array must be of type 'i' or 'I' (integer).")
         return None
-    sorted_array = sorted(array)
+    sorted_array = sorted(input_array)
     n = len(sorted_array)
     mid = n // 2
     if n % 2 == 0:
@@ -123,7 +123,7 @@ def array_median(array):
         return float(sorted_array[mid])
 
 
-def array_std_dev(array):
+def array_std_dev(input_array):
     """Calculate the standard deviation of an array of numbers.
     Truncated to zero decimal places then calculated
 
@@ -133,8 +133,8 @@ def array_std_dev(array):
     Returns:
         Float standard deviation value, or None if the array is empty
     """
-    if isinstance(array, list):
-        for i, value in enumerate(array):
+    if isinstance(input_array, list):
+        for i, value in enumerate(input_array):
             if not isinstance(value, (int, float)):
                 print(f"Warning: Non-numeric value '{value}' at index {i}.")
                 return None
@@ -144,17 +144,18 @@ def array_std_dev(array):
                 return None
         print("Warning: Input is a list, expected an array. "
               "Converting to array.")
-        array = array.array('i', array)
-    if not array:
+        input_array = array.array('i', input_array)
+    if not input_array or len(input_array) == 0:
         print("Warning: Cannot calculate standard deviation "
               "of an empty array.")
         return None
-    if array.typecode != 'i' and array.typecode != 'I':
+    if input_array.typecode != 'i' and input_array.typecode != 'I':
         print("Warning: Array must be of type 'i' or 'I' (integer).")
         return None
-    if len(array) < 2:
+    if len(input_array) < 2:
         print("Warning: Standard deviation requires at least two data points.")
         return None
-    mean = array_mean(array)
-    variance = sum((x - mean) ** 2 for x in array) / (len(array) - 1)
+    mean = array_mean(input_array)
+    variance = sum((x - mean) ** 2 for x in input_array) / \
+        (len(input_array) - 1)
     return variance ** 0.5
